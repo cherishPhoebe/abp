@@ -69,14 +69,14 @@ namespace Volo.Abp.BlobStoring.Minio
             if (!await BlobExistsAsync(client, containerName, blobName))
             {
                 return null;
-            }      
-               
+            }
+
             var memoryStream = new MemoryStream();
-            await client.GetObjectAsync(containerName, blobName,  async stream => 
+            await client.GetObjectAsync(containerName, blobName,  (stream) =>
             {
                     if (stream != null)
                     {
-                        await stream.CopyToAsync(memoryStream);
+                        stream.CopyTo(memoryStream);
                     }
                     else
                     {
@@ -118,13 +118,13 @@ namespace Volo.Abp.BlobStoring.Minio
                     await client.StatObjectAsync(containerName, blobName);
                 }
                 catch (Exception e)
-                {                   
+                {
                     if (e is ObjectNotFoundException)
                     {
                         return false;
-                    }                
-                    
-                    throw;                    
+                    }
+
+                    throw;
                 }
 
                 return true;
